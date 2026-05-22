@@ -4,28 +4,45 @@
 <meta charset="UTF-8">
 
 <style>
-.container {
-  position: relative;
-  display: inline-block;
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* clickable hotspot (invisible) */
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+}
+
+.container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
 .hotspot {
   position: absolute;
 
-  /* CHANGE THESE to match your image */
-  left: 563px;
-  top: 285px;
-  width: 100px;
-  height: 100px;
+  left: 68.5%;
+  top: 60%;
+  width: 150px;
+  height: 150px;
 
   cursor: pointer;
 
-  /* invisible */
+  /* invisible normally */
   background: rgba(0, 0, 0, 0);
+
+  z-index: 10;
 }
 
-/* optional debug mode (turn on if needed) */
+/* DEBUG: show red box when hovering */
 .hotspot:hover {
   background: rgba(255, 0, 0, 0);
 }
@@ -36,43 +53,21 @@
 
 <div class="container">
 
-  <!-- your image -->
-  <img src="image.png" width="800">
+  <img src="image.png">
 
-  <!-- invisible clickable area -->
-  <div class="hotspot" onclick="playAudio()"></div>
+  <div class="hotspot"></div>
 
 </div>
 
-<!-- audio file -->
 <audio id="audio" preload="auto">
   <source src="audio.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-let audioUnlocked = false;
-const audio = document.getElementById("audio");
-
-// unlock audio on ANY first click anywhere
-document.addEventListener("click", function initAudio() {
-  if (!audioUnlocked) {
-    audio.play().then(() => {
-      audio.pause();
-      audio.currentTime = 0;
-      audioUnlocked = true;
-      console.log("Audio unlocked");
-    }).catch(() => {});
-  }
-
-  document.removeEventListener("click", initAudio);
-});
-
-// hotspot click
 document.querySelector(".hotspot").addEventListener("click", function () {
+  const audio = document.getElementById("audio");
   audio.currentTime = 0;
-  audio.play().catch(err => {
-    console.log("Play failed:", err);
-  });
+  audio.play();
 });
 </script>
 
