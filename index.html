@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+/* clickable hotspot (invisible) */
+.hotspot {
+  position: absolute;
+
+  /* CHANGE THESE to match your image */
+  left: 563px;
+  top: 285px;
+  width: 100px;
+  height: 100px;
+
+  cursor: pointer;
+
+  /* invisible */
+  background: rgba(0, 0, 0, 0);
+}
+
+/* optional debug mode (turn on if needed) */
+.hotspot:hover {
+  background: rgba(255, 0, 0, 0.2);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- your image -->
+  <img src="image.png" width="800">
+
+  <!-- invisible clickable area -->
+  <div class="hotspot" onclick="playAudio()"></div>
+
+</div>
+
+<!-- audio file -->
+<audio id="audio" preload="auto">
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let audioUnlocked = false;
+const audio = document.getElementById("audio");
+
+// unlock audio on ANY first click anywhere
+document.addEventListener("click", function initAudio() {
+  if (!audioUnlocked) {
+    audio.play().then(() => {
+      audio.pause();
+      audio.currentTime = 0;
+      audioUnlocked = true;
+      console.log("Audio unlocked");
+    }).catch(() => {});
+  }
+
+  document.removeEventListener("click", initAudio);
+});
+
+// hotspot click
+document.querySelector(".hotspot").addEventListener("click", function () {
+  audio.currentTime = 0;
+  audio.play().catch(err => {
+    console.log("Play failed:", err);
+  });
+});
+</script>
+
+</body>
+</html>
